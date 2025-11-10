@@ -128,6 +128,9 @@ const keyboard = Markup.inlineKeyboard([
             Markup.button.url('На память обо мне 🐺', 'https://www.wildberries.ru/catalog/174918194/detail.aspx?targetUrl=MI'),
             Markup.button.url('Тебе для души 🏀', 'https://www.wildberries.ru/catalog/49601561/detail.aspx'),
         ],
+          [
+            Markup.button.url('САМ ПРИЗ! 📜', process.env.CERT_URL),
+        ],
     ]);
 
     private finalText = `С Днём Рождения, Крис! 🎂
