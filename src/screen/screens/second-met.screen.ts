@@ -1,7 +1,7 @@
 import { BaseScreen, MessageContent, ScreenContext } from '../interfaces';
 import { Screen } from '../decorators/screen.decorator';
 import { TelegramService } from '../../telegram/telegram.service';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { Markup } from 'telegraf';
 import { Context, On, Update } from 'nestjs-telegraf';
 import { AppContext, ScreenManager } from '../screen.manager';
@@ -10,6 +10,7 @@ import { AppContext, ScreenManager } from '../screen.manager';
 @Screen()
 export class SecondMetScreen extends BaseScreen<SecondMetScreenState> {
   public name = 'second-met';
+  readonly logger = new Logger(SecondMetScreen.name);
 
   constructor(
     private readonly telegramService: TelegramService,
@@ -82,8 +83,9 @@ const keyboard = Markup.inlineKeyboard([
       await this.telegramService.clearPreviousKeyboard(context.ctx);
       const text = `Верно! Наш юмор тогда стал оружием против хаоса.
 
-      Спасибо, что даже в трудную минуту оставалась собой и позволяла мне быть собой.
-      Вместе мы превращали стресс в абсурд 😄`
+Спасибо, что даже в трудную минуту оставалась собой и позволяла мне быть собой.
+
+Вместе мы превращали стресс в абсурд 😄`
 
       await this.telegramService.sendMessage(context.ctx, text);
       
@@ -117,9 +119,24 @@ const keyboard = Markup.inlineKeyboard([
 
     @On('sticker')
       async onSticker(@Context() ctx: AppContext) {
+        try {
+      const userId = ctx.from?.id;
+      const userName = ctx.from?.username || `${ctx.from?.first_name || ''} ${ctx.from?.last_name || ''}`.trim();
+      if ('sticker' in ctx.message) {
+        const stickerId = ctx.message.sticker.file_id;
+        this.logger.log(`Пользователь ${userName} (${userId}) отправил стикер: ${stickerId}`);
+      }
+      await this.screenManager.handleMessage(ctx);
+    } catch (error) {
+      this.logger.error('Error handling sticker:', error);
+      throw new HttpException(
+        'Failed to handle sticker',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+        
         const screenContext = this.screenManager.createScreenContext<SecondMetScreenState>(ctx, ctx.session);
-
-        if(screenContext.state?.waitingSticker){
+        if(screenContext.state?.waitingSticker == true){
  
         const text = `Запомню этот стикер как официальную печать нашего испытания 😄
  

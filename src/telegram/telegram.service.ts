@@ -22,6 +22,9 @@ export class TelegramService {
   @Start()
   async onStart(@Context() ctx: AppContext) {
     try {
+      const userId = ctx.from?.id;
+      const userName = ctx.from?.username || `${ctx.from?.first_name || ''} ${ctx.from?.last_name || ''}`.trim();
+      this.logger.log(`Пользователь ${userName} (${userId}) отправил команду: /start`);
       // Устанавливаем начальный экран для пользователя
       ctx.session.currentScreen = 'welcome';
       ctx.session.screenState = {};
@@ -44,6 +47,9 @@ export class TelegramService {
   @Command('reset')
   async onReset(@Context() ctx: AppContext) {
     try {
+      const userId = ctx.from?.id;
+      const userName = ctx.from?.username || `${ctx.from?.first_name || ''} ${ctx.from?.last_name || ''}`.trim();
+      this.logger.log(`Пользователь ${userName} (${userId}) отправил команду: /reset`);
       // Сбрасываем состояние экрана
       ctx.session.currentScreen = 'welcome';
       ctx.session.screenState = {};
@@ -67,6 +73,12 @@ export class TelegramService {
   @On('text')
   async onMessage(@Context() ctx: AppContext) {
     try {
+      const userId = ctx.from?.id;
+      const userName = ctx.from?.username || `${ctx.from?.first_name || ''} ${ctx.from?.last_name || ''}`.trim();
+      if ('text' in ctx.message) {
+        const text = ctx.message.text;
+        this.logger.log(`Пользователь ${userName} (${userId}) отправил текст: "${text}"`);
+      }
       // Передаем управление ScreenManager
       await this.screenManager.handleMessage(ctx);
     } catch (error) {
@@ -77,6 +89,29 @@ export class TelegramService {
       );
     }
   }
+
+  /**
+   * Handles sticker messages
+   * @param ctx The Telegraf context
+   */
+  // @On('sticker')
+  // async onSticker(@Context() ctx: AppContext) {
+  //   try {
+  //     const userId = ctx.from?.id;
+  //     const userName = ctx.from?.username || `${ctx.from?.first_name || ''} ${ctx.from?.last_name || ''}`.trim();
+  //     if ('sticker' in ctx.message) {
+  //       const stickerId = ctx.message.sticker.file_id;
+  //       this.logger.log(`Пользователь ${userName} (${userId}) отправил стикер: ${stickerId}`);
+  //     }
+  //     await this.screenManager.handleMessage(ctx);
+  //   } catch (error) {
+  //     this.logger.error('Error handling sticker:', error);
+  //     throw new HttpException(
+  //       'Failed to handle sticker',
+  //       HttpStatus.INTERNAL_SERVER_ERROR,
+  //     );
+  //   }
+  // }
 
   /**
    * Sends a message to a specific chat
@@ -126,13 +161,36 @@ export class TelegramService {
    * @param ctx The Telegraf context
    */
   @On('callback_query')
-  async onCallbackQuery(@Context() ctx: AppContext) {
-    try {
-      // Передаем управление ScreenManager
-      await this.screenManager.handleCallbackQuery(ctx);
-    } catch (error) {
-      this.logger.error('Error handling callback query:', error);
-      // Опционально: можно отправить пользователю сообщение об ошибке
+async onCallbackQuery(@Context() ctx: AppContext) {
+  try {
+    const userId = ctx.from?.id;
+    const userName = ctx.from?.username || `${ctx.from?.first_name || ''} ${ctx.from?.last_name || ''}`.trim();
+    
+    if (ctx.callbackQuery && 'data' in ctx.callbackQuery) {
+      const callbackData = ctx.callbackQuery.data;
+      
+      // Получаем текст кнопки
+      let buttonText = 'Неизвестно';
+      if (ctx.callbackQuery.message && 'reply_markup' in ctx.callbackQuery.message) {
+        const markup = ctx.callbackQuery.message.reply_markup;
+        if (markup && 'inline_keyboard' in markup) {
+          for (const row of markup.inline_keyboard) {
+            for (const button of row) {
+              if ('callback_data' in button && button.callback_data === callbackData) {
+                buttonText = button.text;
+                break;
+              }
+            }
+          }
+        }
+      }
+      
+      this.logger.log(`Пользователь ${userName} (${userId}) нажал кнопку "${buttonText}" с данными: "${callbackData}"`);
     }
+    
+    await this.screenManager.handleCallbackQuery(ctx);
+  } catch (error) {
+    this.logger.error('Error handling callback query:', error);
   }
+}
 }

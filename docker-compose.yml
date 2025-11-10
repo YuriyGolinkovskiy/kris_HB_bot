@@ -5,7 +5,7 @@ services:
     container_name: kris-bot
     build:
       context: .
-      target: builder
+      target: .
       dockerfile: ./Dockerfile
     env_file:
       - .env
