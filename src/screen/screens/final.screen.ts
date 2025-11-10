@@ -23,7 +23,7 @@ export class FinalMetScreen extends BaseScreen<FinalMetScreenState> {
         Markup.button.callback('Конечно нет, веди дальше! 👊', 'pre_final'),
       ],
             [
-        Markup.button.callback('Уже вся измучилась, но останавливать поздно 🫠', 'pre_final'),
+        Markup.button.callback('Устала, но останавливать поздно 🫠', 'pre_final'),
       ],
       [
         Markup.button.callback(' А можно я сама всё угадаю? 😏', 'pre_final'),
@@ -121,12 +121,12 @@ const keyboard = Markup.inlineKeyboard([
   }
     private keyboardReward = Markup.inlineKeyboard([
         [
-            Markup.button.url('Если любите погрубее)', 'https://www.wildberries.ru/catalog/537502467/detail.aspx'),
-            Markup.button.url('Малыш Эрни оценит', 'https://www.wildberries.ru/catalog/165046202/detail.aspx?targetUrl=MI'),
+            Markup.button.url('Для жестких переговоров 🐕‍🦺', 'https://www.wildberries.ru/catalog/537502467/detail.aspx'),
+            Markup.button.url('Малыш Эрни оценит 🦴', 'https://www.wildberries.ru/catalog/165046202/detail.aspx?targetUrl=MI'),
         ],
         [
-            Markup.button.url('На память обо мне', 'https://www.wildberries.ru/catalog/174918194/detail.aspx?targetUrl=MI'),
-            Markup.button.url('Тебе для души', 'https://www.wildberries.ru/catalog/49601561/detail.aspx'),
+            Markup.button.url('На память обо мне 🐺', 'https://www.wildberries.ru/catalog/174918194/detail.aspx?targetUrl=MI'),
+            Markup.button.url('Тебе для души 🏀', 'https://www.wildberries.ru/catalog/49601561/detail.aspx'),
         ],
     ]);
 
@@ -136,7 +136,7 @@ const keyboard = Markup.inlineKeyboard([
 
 Жду фоточек, если захочешь похвастаться своим выбором!
 
-Твой Юрий, крепко обнял, приподнял, поставил 🤗`
+Твой Юрий, крепко обнял и не отпускаю 🤗`
     
     private textReward = `Ну что ж, вот твой маленький приз! 🎁
 Подарочный сертификат. Выбирай что душе угодно!

@@ -72,7 +72,7 @@ export class ThreeMetScreen extends BaseScreen<ThreeMetScreenState> {
             Markup.button.callback('Твою неожиданную женственность 🌸', 'you_perfect'),
         ],
         [
-            Markup.button.callback('Твою безграничную доброту', 'you_perfect'),
+            Markup.button.callback('Твою безграничную доброту 🧸', 'you_perfect'),
         ],
         [
             Markup.button.callback('Всё сразу и даже больше 💫', 'you_perfect'),
