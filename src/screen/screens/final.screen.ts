@@ -122,6 +122,8 @@ const keyboard = Markup.inlineKeyboard([
     private keyboardReward = Markup.inlineKeyboard([
         [
             Markup.button.url('Для жестких переговоров 🐕‍🦺', 'https://www.wildberries.ru/catalog/537502467/detail.aspx'),
+        ],
+        [
             Markup.button.url('Малыш Эрни оценит 🦴', 'https://www.wildberries.ru/catalog/165046202/detail.aspx?targetUrl=MI'),
         ],
         [
@@ -129,7 +131,7 @@ const keyboard = Markup.inlineKeyboard([
             Markup.button.url('Тебе для души 🏀', 'https://www.wildberries.ru/catalog/49601561/detail.aspx'),
         ],
           [
-            Markup.button.url('САМ ПРИЗ! 📜', process.env.CERT_URL),
+            Markup.button.url('ОТКРЫТЬ ОБЯЗАТЕЛЬНО!🔓', process.env.CERT_URL),
         ],
     ]);
 
